@@ -2,18 +2,33 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyo
+*.pyd
+
+# C extensions
+*.so
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
+
+# Python tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyre/
+.hypothesis/
 
 # Virtual environments
 venv/
 env/
 .venv/
+ENV/
 
 # IDE / Editor
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # OS files
 Thumbs.db
@@ -23,3 +38,28 @@ Thumbs.db
 dist/
 build/
 *.egg-info/
+
+# Environment and local settings
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Test and coverage artifacts
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Runtime artifacts
+*.pid
+*.sqlite3
+
+# Type checker and language server
+pyrightconfig.local.json
+
+# Local screenshots working files (keep final PNGs)
+screenshots/*.tmp
+screenshots/*.psd

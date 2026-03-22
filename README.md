@@ -1,129 +1,165 @@
-# FastAPI Final Project - Movie Ticket Booking (CineStar)
+# CineStar Movie Ticket Booking API
 
-This project is a complete FastAPI backend for a Movie Ticket Booking system, implemented to cover all Day 1 to Day 6 concepts from the internship assignment.
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Pydantic](https://img.shields.io/badge/Pydantic-E92063?style=for-the-badge&logo=pydantic&logoColor=white)
+![Uvicorn](https://img.shields.io/badge/Uvicorn-222222?style=for-the-badge&logo=uvicorn&logoColor=white)
+![Swagger](https://img.shields.io/badge/Swagger%20UI-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
 
-## Project Details
+A complete FastAPI backend built for the internship final project requirement using the Movie Ticket Booking domain.
+
+## Linkedln Post Link
+
+- LinkedIn post: https://www.linkedin.com/posts/geet-jamdal-6824b7316_github-premo625fastapi-movie-ticket-booking-activity-7441535098325196800-Ud6H?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFAp_gIBGXslOmEQLFltxJy5tVLPPptJ-c4
+
+## Project Summary
 
 - Selected project: Movie Ticket Booking
-- Framework: FastAPI
-- Validation: Pydantic
-- Data storage: In-memory lists (no database)
-- API test interface: Swagger UI
+- Coverage: All 20 required tasks (Day 1 to Day 6)
+- Data store: In-memory lists (resets after server restart)
+- API docs/testing: Swagger at http://127.0.0.1:8000/docs
 
 ## Folder Structure
 
-- `main.py`
-- `requirements.txt`
-- `README.md`
-- `screenshots/`
+```text
+.
+|- main.py
+|- requirements.txt
+|- README.md
+`- screenshots/
+```
 
-## Setup Instructions
+## Quick Start
 
-1. Create and activate a virtual environment.
-2. Install dependencies:
+### 1) Create and activate virtual environment
 
-```bash
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+### 2) Install dependencies
+
+```powershell
 pip install -r requirements.txt
 ```
 
-3. Run the server:
+### 3) Run server
 
-```bash
+```powershell
 uvicorn main:app --reload
 ```
 
-4. Open Swagger UI:
+### 4) Open Swagger
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
-## Implemented Features (Q1-Q20)
+## Tech Features Implemented
 
-### Day 1 - Basic GET APIs
+### Day 1 - Core GET APIs
 
-1. `GET /` home route.
-2. `GET /movies` returns all movies, total count, total seats available.
-3. `GET /movies/{movie_id}` returns movie by ID with not found handling.
-4. `GET /bookings` returns all bookings, total, and total revenue.
-5. `GET /movies/summary` returns overall movie analytics.
+- `GET /`
+- `GET /movies`
+- `GET /movies/{movie_id}`
+- `GET /bookings`
+- `GET /movies/summary`
 
-### Day 2 - POST + Pydantic Validation
+### Day 2 - Pydantic Validation + POST APIs
 
-6. `BookingRequest` model with constraints:
-   - `customer_name` min length
-   - `movie_id > 0`
-   - `seats > 0 and <= 10`
-   - `phone` min length
-   - `seat_type` default `standard`
-7. Helper functions and validation support used in booking flow.
-8. `POST /bookings` with seat availability checks and booking creation.
-9. Promo code support in booking (`SAVE10`, `SAVE20`) with original and discounted cost fields.
-10. Filtering endpoint based on optional query params.
+- `BookingRequest` model with field constraints
+- Validation errors for invalid body payloads
+- `POST /bookings` booking flow
 
 ### Day 3 - Helper Functions + Query Logic
 
 - `find_movie(movie_id)`
 - `calculate_ticket_cost(base_price, seats, seat_type, promo_code)`
-- `filter_movies_logic(...)` with `is not None` checks
-- `paginate_items(...)`
+- `filter_movies_logic(...)` using `is not None`
+- Reusable pagination helper
 
-### Day 4 - CRUD Operations
+### Day 4 - CRUD
 
-11. `POST /movies` adds a new movie with duplicate title check and `201 Created`.
-12. `PUT /movies/{movie_id}` supports optional updates.
-13. `DELETE /movies/{movie_id}` prevents deleting movies with existing bookings.
+- `POST /movies` (201 created + duplicate title check)
+- `PUT /movies/{movie_id}`
+- `DELETE /movies/{movie_id}` with booking protection
 
 ### Day 5 - Multi-step Workflow
 
-14. Seat hold workflow:
-   - `POST /seat-hold`
-   - `GET /seat-hold`
-15. Hold conversion/release workflow:
-   - `POST /seat-confirm/{hold_id}` converts hold to booking
-   - `DELETE /seat-release/{hold_id}` restores seats
+- `POST /seat-hold`
+- `GET /seat-hold`
+- `POST /seat-confirm/{hold_id}`
+- `DELETE /seat-release/{hold_id}`
 
 ### Day 6 - Search, Sort, Pagination, Combined Browse
 
-16. `GET /movies/search` across title, genre, language.
-17. `GET /movies/sort` with validated sort fields and order.
-18. `GET /movies/page` with pagination metadata.
-19. Booking utilities:
-   - `GET /bookings/search`
-   - `GET /bookings/sort`
-   - `GET /bookings/page`
-20. `GET /movies/browse` combines keyword search + filters + sorting + pagination.
+- `GET /movies/search`
+- `GET /movies/sort`
+- `GET /movies/page`
+- `GET /bookings/search`
+- `GET /bookings/sort`
+- `GET /bookings/page`
+- `GET /movies/browse`
 
-## Route Ordering Note
+## Route Ordering Compliance
 
-Fixed routes are defined before variable routes to follow FastAPI routing rules. Example:
+Fixed routes are declared before variable routes to avoid path conflicts.
 
-- `/movies/summary`, `/movies/filter`, `/movies/search`, `/movies/sort`, `/movies/page`, `/movies/browse`
-- then `/movies/{movie_id}`
+Example order used:
 
-## Suggested Swagger Testing Order
+1. `/movies/summary`
+2. `/movies/filter`
+3. `/movies/search`
+4. `/movies/sort`
+5. `/movies/page`
+6. `/movies/browse`
+7. `/movies/{movie_id}`
 
-1. Test all GET endpoints (Q1-Q5).
-2. Test booking validation (Q6-Q9).
-3. Test filters and helper-based logic (Q10).
-4. Test CRUD on movies (Q11-Q13).
-5. Test hold -> confirm/release workflow (Q14-Q15).
-6. Test search/sort/page/browse endpoints (Q16-Q20).
+## Screenshot Evidence
 
-## Screenshot Naming (Recommended)
+All question-wise screenshots are saved in the `screenshots/` folder using proper names.
 
-Use PNG files in `screenshots/` such as:
+Primary files include:
 
 - `Q1_home_route.png`
-- `Q2_get_movies.png`
+- `Q2_get_all_movies.png`
 - `Q3_get_movie_by_id_valid.png`
 - `Q3_get_movie_by_id_invalid.png`
-- `Q8_create_booking.png`
-- `Q9_promo_save10.png`
-- `Q14_seat_hold.png`
-- `Q15_hold_confirm.png`
-- `Q20_movies_browse.png`
+- `Q4_get_bookings_initial.png`
+- `Q5_movies_summary.png`
+- `Q6_validation_error_seats_0.png`
+- `Q7_helpers_in_code.png`
+- `Q8_create_booking_success.png`
+- `Q9_booking_with_promo_save10.png`
+- `Q10_movies_filter.png`
+- `Q11_create_movie_201.png`
+- `Q12_update_movie.png`
+- `Q13_delete_movie_blocked_400.png`
+- `Q14_seat_hold_create_201.png`
+- `Q14_seat_hold_list_200.png`
+- `Q15_seat_confirm_hold_201.png`
+- `Q15_seat_release_hold_200.png`
+- `Q16_movies_search_keyword_action.png`
+- `Q17_movies_sort_ticket_price_desc.png`
+- `Q18_movies_page_1_limit_3.png`
+- `Q18_movies_page_2_limit_3.png`
+- `Q19_bookings_search_customer_prem.png`
+- `Q19_bookings_sort_total_cost_desc.png`
+- `Q19_bookings_page_1_limit_2.png`
+- `Q20_movies_browse_combined_filters.png`
 
-## Important Note
+## Final Submission Checklist
 
-This project uses in-memory data structures. If you restart the server, data resets to initial seed values.
+- Project selected and completed: Movie Ticket Booking
+- All 20 tasks implemented and tested in Swagger
+- Screenshots captured and organized in `screenshots/`
+- Code pushed to GitHub
+- LinkedIn post published
+- Tagged Innomatics Research Labs in post
+- Submitted GitHub and LinkedIn links in Google Form
+
+## Notes
+
+- Since this project uses in-memory lists, restarting the server resets data.
+- For final verification screenshots, run all mutation endpoints in one session.
